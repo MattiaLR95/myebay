@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import it.prova.raccoltafilmspringmvc.model.Ruolo;
+import it.prova.myebay.model.Ruolo;
 
 public class RuoloDTO {
 
