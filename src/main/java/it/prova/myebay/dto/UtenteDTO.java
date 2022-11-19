@@ -182,10 +182,19 @@ public class UtenteDTO {
 	}
 
 	public static UtenteDTO buildUtenteDTOFromModelCompleto(Utente utenteModel, boolean includeRoles) {
-		UtenteDTO result = buildUtenteDTOFromModel(utenteModel, includeRoles);
+		UtenteDTO result = UtenteDTO.buildUtenteDTOFromModel(utenteModel, includeRoles);
 		result.setCreditoResiduo(utenteModel.getCreditoResiduo());
-		result.setAcquisti(utenteModel.getAcquisti());
-		result.setAnnunci(utenteModel.getAnnunci());
+		result.setAcquisti(new HashSet<AcquistoDTO>(utenteModel.getAcquisti()
+				.stream()
+				.map(acquisto -> AcquistoDTO.buildAcquistoDTOFromModel(acquisto))
+				.collect(Collectors.toSet())) 
+				);
+		result.setAnnunci(new HashSet<AnnuncioDTO>(utenteModel.getAnnunci()
+				.stream()
+				.map(annuncio -> AnnuncioDTO.buildAnnuncioDTOFromModel(annuncio))
+				.collect(Collectors.toSet()))
+				);		
+		return result;
 	}
 
 	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput, boolean includeRoles) {

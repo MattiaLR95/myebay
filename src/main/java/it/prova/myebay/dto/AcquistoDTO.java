@@ -101,15 +101,15 @@ public class AcquistoDTO {
 	}
 
 	// niente password...
-	public static AcquistoDTO buildAcquistoDTOFromModel(Acquisto acquistoModel, boolean includeUtente) {
+	public static AcquistoDTO buildAcquistoDTOFromModel(Acquisto acquistoModel) {
 		AcquistoDTO result = new AcquistoDTO(acquistoModel.getId(), acquistoModel.getDescrizione(),
 				acquistoModel.getData(), acquistoModel.getPrezzo());
 		return result;
 	}
 
-	public static List<AcquistoDTO> createUtenteDTOListFromModelList(List<Acquisto> modelListInput, boolean includeUtente) {
+	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput, boolean includeUtente) {
 		return modelListInput.stream().map(acquistoEntity -> {
-			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity, includeUtente);
+			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity);
 		}).collect(Collectors.toList());
 	}
 
