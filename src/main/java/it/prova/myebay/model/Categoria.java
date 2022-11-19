@@ -24,7 +24,7 @@ public class Categoria {
 	@Column(name = "codice")
 	private String codice;
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorie")
-	private Set<Acquisto> articoli = new HashSet<>();
+	private Set<Annuncio> annunci = new HashSet<>();
 
 	public Categoria() {
 		super();
@@ -36,12 +36,12 @@ public class Categoria {
 		this.codice = codice;
 	}
 
-	public Categoria(Long id, String descrizione, String codice, Set<Acquisto> articoli) {
+	public Categoria(Long id, String descrizione, String codice, Set<Annuncio> annunci) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.codice = codice;
-		this.articoli = articoli;
+		this.annunci = annunci;
 	}
 
 	public Long getId() {
@@ -68,12 +68,12 @@ public class Categoria {
 		this.codice = codice;
 	}
 
-	public Set<Acquisto> getArticoli() {
-		return articoli;
+	public Set<Annuncio> getAnnunci() {
+		return annunci;
 	}
 
-	public void setArticoli(Set<Acquisto> articoli) {
-		this.articoli = articoli;
+	public void setArticoli(Set<Annuncio> annunci) {
+		this.annunci = annunci;
 	}
 
 }
