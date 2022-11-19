@@ -2,7 +2,9 @@ package it.prova.myebay.dto;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -35,12 +37,16 @@ public class UtenteDTO {
 	private String cognome;
 
 	private Date dateCreated;
-	
+
 	private Integer creditoResiduo;
 
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
+
+	private Set<AnnuncioDTO> annunci = new HashSet<>();
+
+	private Set<AcquistoDTO> acquisti = new HashSet<>();
 
 	public UtenteDTO() {
 	}
@@ -126,6 +132,30 @@ public class UtenteDTO {
 		this.ruoliIds = ruoliIds;
 	}
 
+	public Integer getCreditoResiduo() {
+		return creditoResiduo;
+	}
+
+	public void setCreditoResiduo(Integer creditoResiduo) {
+		this.creditoResiduo = creditoResiduo;
+	}
+
+	public Set<AnnuncioDTO> getAnnunci() {
+		return annunci;
+	}
+
+	public void setAnnunci(Set<AnnuncioDTO> annunci) {
+		this.annunci = annunci;
+	}
+
+	public Set<AcquistoDTO> getAcquisti() {
+		return acquisti;
+	}
+
+	public void setAcquisti(Set<AcquistoDTO> acquisti) {
+		this.acquisti = acquisti;
+	}
+
 	public boolean isAttivo() {
 		return this.stato != null && this.stato.equals(StatoUtente.ATTIVO);
 	}
@@ -149,6 +179,13 @@ public class UtenteDTO {
 					.toArray(new Long[] {});
 
 		return result;
+	}
+
+	public static UtenteDTO buildUtenteDTOFromModelCompleto(Utente utenteModel, boolean includeRoles) {
+		UtenteDTO result = buildUtenteDTOFromModel(utenteModel, includeRoles);
+		result.setCreditoResiduo(utenteModel.getCreditoResiduo());
+		result.setAcquisti(utenteModel.getAcquisti());
+		result.setAnnunci(utenteModel.getAnnunci());
 	}
 
 	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput, boolean includeRoles) {
