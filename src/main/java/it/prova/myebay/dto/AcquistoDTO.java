@@ -104,8 +104,7 @@ public class AcquistoDTO {
 		return result;
 	}
 
-	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput,
-			boolean includeUtente) {
+	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput) {
 		return modelListInput.stream().map(acquistoEntity -> {
 			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity);
 		}).collect(Collectors.toList());
