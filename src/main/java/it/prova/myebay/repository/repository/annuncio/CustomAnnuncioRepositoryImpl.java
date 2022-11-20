@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 
 import it.prova.myebay.model.Annuncio;
-import it.prova.myebay.model.Annuncio;
 
 public class CustomAnnuncioRepositoryImpl implements CustomAnnuncioRepository {
 
