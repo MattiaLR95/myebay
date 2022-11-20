@@ -9,6 +9,6 @@ import it.prova.myebay.model.Annuncio;
 import it.prova.myebay.model.Utente;
 
 public interface AnnuncioRepository extends CrudRepository<Annuncio, Long>, CustomAnnuncioRepository{
-	@Query("from Annuncio a where a.utente.nickname = ?1")
-	List<Annuncio> findListAnnunci(Utente input);
+//	@Query("from Annuncio a where a.utente.nickname = ?1")
+//	List<Annuncio> findListAnnunci(Utente input);
 }
