@@ -1,4 +1,4 @@
-package it.prova.myebay.repository.repository.acquisto;
+package it.prova.myebay.repository.acquisto;
 
 import java.util.List;
 
