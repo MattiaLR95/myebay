@@ -27,7 +27,7 @@ public class Acquisto {
 	private Integer prezzo;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id")
-	private Utente utente;
+	private Utente utenteAcquirente;
 
 	public Acquisto() {
 		super();
@@ -48,13 +48,13 @@ public class Acquisto {
 		this.prezzo = prezzo;
 	}
 
-	public Acquisto(Long id, String descrizione, Date data, Integer prezzo, Utente utente) {
+	public Acquisto(Long id, String descrizione, Date data, Integer prezzo, Utente utenteAcquirente) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.data = data;
 		this.prezzo = prezzo;
-		this.utente = utente;
+		this.utenteAcquirente = utenteAcquirente;
 	}
 
 	public Long getId() {
@@ -89,12 +89,12 @@ public class Acquisto {
 		this.prezzo = prezzo;
 	}
 
-	public Utente getUtente() {
-		return utente;
+	public Utente getUtenteAcquirente() {
+		return utenteAcquirente;
 	}
 
-	public void setUtente(Utente utente) {
-		this.utente = utente;
+	public void setUtenteAcquirente(Utente utenteAcquirente) {
+		this.utenteAcquirente = utenteAcquirente;
 	}
 
 }

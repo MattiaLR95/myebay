@@ -1,5 +1,6 @@
 package it.prova.myebay.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,11 +28,13 @@ public class Annuncio {
 	private String testoAnnuncio;
 	@Column(name = "prezzo")
 	private Integer prezzo;
+	@Column(name = "data")
+	private Date data;
 	@Column(name = "aperto")
-	private boolean aperto;
+	private Boolean aperto;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id", nullable = false)
-	private Utente utente;
+	private Utente utenteInserimento;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "articolo_categoria", joinColumns = @JoinColumn(name = "articolo_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "ID"))
 	private Set<Categoria> categorie = new HashSet<>();
@@ -40,22 +43,24 @@ public class Annuncio {
 		super();
 	}
 
-	public Annuncio(String testoAnnuncio, Integer prezzo, boolean aperto, Utente utente) {
+	public Annuncio(String testoAnnuncio, Integer prezzo, Date data, Boolean aperto, Utente utenteInserimento) {
 		super();
 		this.testoAnnuncio = testoAnnuncio;
 		this.prezzo = prezzo;
+		this.data = data;
 		this.aperto = aperto;
-		this.utente = utente;
+		this.utenteInserimento = utenteInserimento;
 	}
 
-	public Annuncio(Long id, String testoAnnuncio, Integer prezzo, boolean aperto, Utente utente,
+	public Annuncio(Long id, String testoAnnuncio, Integer prezzo, Date data, Boolean aperto, Utente utenteInserimento,
 			Set<Categoria> categorie) {
 		super();
 		this.id = id;
 		this.testoAnnuncio = testoAnnuncio;
 		this.prezzo = prezzo;
+		this.data = data;
 		this.aperto = aperto;
-		this.utente = utente;
+		this.utenteInserimento = utenteInserimento;
 		this.categorie = categorie;
 	}
 
@@ -83,20 +88,28 @@ public class Annuncio {
 		this.prezzo = prezzo;
 	}
 
-	public boolean isAperto() {
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Boolean getAperto() {
 		return aperto;
 	}
 
-	public void setAperto(boolean aperto) {
+	public void setAperto(Boolean aperto) {
 		this.aperto = aperto;
 	}
 
-	public Utente getUtente() {
-		return utente;
+	public Utente getUtenteInserimento() {
+		return utenteInserimento;
 	}
 
-	public void setUtente(Utente utente) {
-		this.utente = utente;
+	public void setUtenteInserimento(Utente utenteInserimento) {
+		this.utenteInserimento = utenteInserimento;
 	}
 
 	public Set<Categoria> getCategorie() {

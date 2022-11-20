@@ -1,6 +1,5 @@
 package it.prova.myebay.dto;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 
 import it.prova.myebay.model.Acquisto;
-import it.prova.myebay.model.Ruolo;
-import it.prova.myebay.model.Utente;
 
 public class AcquistoDTO {
 
@@ -21,7 +18,7 @@ public class AcquistoDTO {
 	@NotBlank
 	private Integer prezzo;
 	@NotBlank
-	private UtenteDTO utente;
+	private UtenteDTO utenteAcquirente;
 
 	public Long getId() {
 		return id;
@@ -55,12 +52,12 @@ public class AcquistoDTO {
 		this.prezzo = prezzo;
 	}
 
-	public UtenteDTO getUtente() {
-		return utente;
+	public UtenteDTO getUtenteAcquirente() {
+		return utenteAcquirente;
 	}
 
-	public void setUtente(UtenteDTO utente) {
-		this.utente = utente;
+	public void setUtenteAcquirente(UtenteDTO utenteAcquirente) {
+		this.utenteAcquirente = utenteAcquirente;
 	}
 
 	public AcquistoDTO() {
@@ -83,13 +80,13 @@ public class AcquistoDTO {
 	}
 
 	public AcquistoDTO(Long id, @NotBlank String descrizione, Date data, @NotBlank Integer prezzo,
-			@NotBlank UtenteDTO utente) {
+			@NotBlank UtenteDTO utenteAcquirente) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.data = data;
 		this.prezzo = prezzo;
-		this.utente = utente;
+		this.utenteAcquirente = utenteAcquirente;
 	}
 
 	public Acquisto buildAcquistoModel(boolean includeIdUtente) {
@@ -107,7 +104,8 @@ public class AcquistoDTO {
 		return result;
 	}
 
-	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput, boolean includeUtente) {
+	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput,
+			boolean includeUtente) {
 		return modelListInput.stream().map(acquistoEntity -> {
 			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity);
 		}).collect(Collectors.toList());
