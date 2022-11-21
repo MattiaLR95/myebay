@@ -70,6 +70,17 @@ public class Utente {
 		this.dateCreated = dateCreated;
 	}
 
+	public Utente(String username, String password, String nome, String cognome, Date dateCreated,
+			Integer creditoResiduo) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dateCreated = dateCreated;
+		this.creditoResiduo = creditoResiduo;
+	}
+
 	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated,
 			StatoUtente stato) {
 		this.id = id;

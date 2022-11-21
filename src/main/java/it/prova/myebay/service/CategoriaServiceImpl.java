@@ -52,7 +52,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 	@Override
 	@Transactional(readOnly = true)
 	public Categoria cercaPerDescrizioneECodice(String descrizione, String codice) {
-		return repository.findByDescrizioneAndCodice(descrizione, codice);
+		return repository.FindByDescrizioneAndCodice(descrizione, codice);
 	}
 
 	@Override
