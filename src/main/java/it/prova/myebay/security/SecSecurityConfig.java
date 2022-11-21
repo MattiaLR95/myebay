@@ -36,7 +36,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	 http.authorizeRequests()
          .antMatchers("/assets/**").permitAll()
-         .antMatchers("/", "/home", "/annuncio/**", "/utente/insert", "/utente/saveSignUp").permitAll()
+         .antMatchers("/", "/home", "/annuncio/**", "/utente/insert", "/utente/saveSignUp", "/utente/insertRegistrazione", "/utente/saveRegistrazione").permitAll()
          .antMatchers("/login").permitAll()
          .antMatchers("/utente/**").hasRole("ADMIN")
          .antMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")

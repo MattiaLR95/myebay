@@ -100,15 +100,21 @@ public class UtenteController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";
 	}
+	
+	@GetMapping("/insertRegistrazione")
+	public String createAutoregistrazione(Model model) {
+		model.addAttribute("autoinsert_utente_attr", new UtenteDTO());
+		return "utente/autoregistrazione";
+	}
 
-	@PostMapping("/saveSignUp")
-	public String saveSignUp(
+	@PostMapping("/saveRegistrazione")
+	public String saveAutoregistrazione(
 			@Validated({ ValidationWithPassword.class,
-					ValidationNoPassword.class }) @ModelAttribute("insert_utente_attr") UtenteDTO utenteDTO,
+					ValidationNoPassword.class }) @ModelAttribute("autoinsert_utente_attr") UtenteDTO utenteDTO,
 			BindingResult result, Model model, RedirectAttributes redirectAttrs) {
 
 		if (result.hasErrors()) {
-			return "utente/insert";
+			return "utente/autoregistrazione";
 		}
 
 		if (!result.hasFieldErrors("password") && !utenteDTO.getPassword().equals(utenteDTO.getConfermaPassword()))
