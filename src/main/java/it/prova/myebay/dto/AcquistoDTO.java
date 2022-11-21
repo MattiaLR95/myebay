@@ -4,21 +4,37 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
-
 import it.prova.myebay.model.Acquisto;
 
 public class AcquistoDTO {
 
 	private Long id;
-	@NotBlank
 	private String descrizione;
-
 	private Date data;
-	@NotBlank
 	private Integer prezzo;
-	@NotBlank
-	private UtenteDTO utenteAcquirente;
+	
+	private UtenteDTO utente;
+
+	public AcquistoDTO() {
+		super();
+	}
+
+	public AcquistoDTO(Long id, String descrizione, Date data, Integer prezzo, UtenteDTO utente) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.data = data;
+		this.prezzo = prezzo;
+		this.utente = utente;
+	}
+	
+	public AcquistoDTO(Long id, String descrizione, Date data, Integer prezzo) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.data = data;
+		this.prezzo = prezzo;
+	}
 
 	public Long getId() {
 		return id;
@@ -52,62 +68,31 @@ public class AcquistoDTO {
 		this.prezzo = prezzo;
 	}
 
-	public UtenteDTO getUtenteAcquirente() {
-		return utenteAcquirente;
+	public UtenteDTO getUtente() {
+		return utente;
 	}
 
-	public void setUtenteAcquirente(UtenteDTO utenteAcquirente) {
-		this.utenteAcquirente = utenteAcquirente;
+	public void setUtente(UtenteDTO utente) {
+		this.utente = utente;
 	}
-
-	public AcquistoDTO() {
-		super();
+	
+	public Acquisto buildAcquistoModel() {
+		return new Acquisto(this.id, this.descrizione, this.data, this.prezzo, this.utente.buildUtenteModel(false));
 	}
-
-	public AcquistoDTO(@NotBlank String descrizione, Date data, @NotBlank Integer prezzo) {
-		super();
-		this.descrizione = descrizione;
-		this.data = data;
-		this.prezzo = prezzo;
-	}
-
-	public AcquistoDTO(Long id, @NotBlank String descrizione, Date data, @NotBlank Integer prezzo) {
-		super();
-		this.id = id;
-		this.descrizione = descrizione;
-		this.data = data;
-		this.prezzo = prezzo;
-	}
-
-	public AcquistoDTO(Long id, @NotBlank String descrizione, Date data, @NotBlank Integer prezzo,
-			@NotBlank UtenteDTO utenteAcquirente) {
-		super();
-		this.id = id;
-		this.descrizione = descrizione;
-		this.data = data;
-		this.prezzo = prezzo;
-		this.utenteAcquirente = utenteAcquirente;
-	}
-
-	public Acquisto buildAcquistoModel(boolean includeIdUtente) {
-		Acquisto result = new Acquisto(this.id, this.descrizione, this.data, this.prezzo);
-		if (includeIdUtente && this.id != null)
-			result.setId(id);
-
+	
+	public static AcquistoDTO buildAcquistoDTOFromModel(Acquisto acquistoModel, boolean includeUtente) {
+		AcquistoDTO result = new AcquistoDTO(acquistoModel.getId(), acquistoModel.getDescrizione(), acquistoModel.getData(), acquistoModel.getPrezzo());
+		
+		if(includeUtente)
+			result.setUtente(UtenteDTO.buildUtenteDTOFromModel(acquistoModel.getUtente(), false));
+		
 		return result;
 	}
-
-	// niente password...
-	public static AcquistoDTO buildAcquistoDTOFromModel(Acquisto acquistoModel) {
-		AcquistoDTO result = new AcquistoDTO(acquistoModel.getId(), acquistoModel.getDescrizione(),
-				acquistoModel.getData(), acquistoModel.getPrezzo());
-		return result;
-	}
-
-	public static List<AcquistoDTO> createAcquistoDTOListFromModelList(List<Acquisto> modelListInput) {
+	
+	public static List<AcquistoDTO> createAcquistoDTOFromModelList(List<Acquisto> modelListInput, boolean includeUtente) {
 		return modelListInput.stream().map(acquistoEntity -> {
-			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity);
+			return AcquistoDTO.buildAcquistoDTOFromModel(acquistoEntity, includeUtente);
 		}).collect(Collectors.toList());
 	}
-
+	
 }

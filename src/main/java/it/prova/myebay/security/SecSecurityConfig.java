@@ -16,36 +16,49 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-
+	
 	@Autowired
-	private CustomAuthenticationSuccessHandlerImpl successHandler;
-
+    private CustomAuthenticationSuccessHandlerImpl successHandler;
+	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(customUserDetailsService);
-		// .passwordEncoder(passwordEncoder());
-	}
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers("/assets/**").permitAll()
-		.antMatchers("/login", "/", "/index").permitAll()
-				.antMatchers("/utente/**").hasRole("ADMIN")
-				.antMatchers("/acquisto/**").hasRole("CLASSIC_USER")
-				.antMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
-				// .antMatchers("/anonymous*").anonymous()
-				.anyRequest().authenticated().and().exceptionHandling().accessDeniedPage("/accessDenied")
-				.and().formLogin().loginPage("/login")
-				// .defaultSuccessUrl("/home",true)
-				// uso un custom handler perché voglio mettere delle user info in session
-				.successHandler(successHandler).failureUrl("/login?error=true").permitAll().and().logout()
-				.logoutSuccessUrl("/executeLogout").invalidateHttpSession(true).permitAll().and().csrf().disable();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+ 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+         .userDetailsService(customUserDetailsService);
+         //.passwordEncoder(passwordEncoder());
+    }
+    
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    	 http.authorizeRequests()
+         .antMatchers("/assets/**").permitAll()
+         .antMatchers("/", "/home", "/annuncio/**", "/utente/insert", "/utente/saveSignUp").permitAll()
+         .antMatchers("/login").permitAll()
+         .antMatchers("/utente/**").hasRole("ADMIN")
+         .antMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
+         //.antMatchers("/anonymous*").anonymous()
+         .anyRequest().authenticated()
+         .and().exceptionHandling().accessDeniedPage("/accessDenied")
+         .and()
+         	.formLogin()
+         	.loginPage("/login")
+         	//.defaultSuccessUrl("/home",true)
+         	//uso un custom handler perché voglio mettere delle user info in session
+         	.successHandler(successHandler)
+         	.failureUrl("/login?error=true")
+         	.permitAll()
+         .and()
+         	.logout()
+         	.logoutSuccessUrl("/executeLogout")
+            .invalidateHttpSession(true)
+            .permitAll()
+         .and()
+            .csrf()
+            .disable();
 //         
-	}
+    }
 }

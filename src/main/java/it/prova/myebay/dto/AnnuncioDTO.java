@@ -1,19 +1,23 @@
 package it.prova.myebay.dto;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import it.prova.myebay.model.Annuncio;
+import it.prova.myebay.model.Categoria;
 
 public class AnnuncioDTO {
 
 	private Long id;
 
-	@NotBlank(message = "{testoannunci.notblank}")
+	@NotBlank(message = "{testoannuncio.notblank}")
+	@Size(min = 10, max = 100, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri")
 	private String testoAnnuncio;
 	@NotNull(message = "{prezzo.notnull}")
 	private Integer prezzo;
@@ -21,13 +25,32 @@ public class AnnuncioDTO {
 	private Date data;
 
 	private Boolean aperto;
-	@NotNull(message = "{utenteInserimento.notnull")
-	private UtenteDTO utenteInserimento;
+
+	private UtenteDTO utente;
 
 	private Long[] categorieIds;
 
 	public AnnuncioDTO() {
+		super();
+	}
 
+	public AnnuncioDTO(Long id, String testoAnnuncio, Integer prezzo, Date data, Boolean aperto, UtenteDTO utente) {
+		super();
+		this.id = id;
+		this.testoAnnuncio = testoAnnuncio;
+		this.prezzo = prezzo;
+		this.data = data;
+		this.aperto = aperto;
+		this.utente = utente;
+	}
+
+	public AnnuncioDTO(Long id, String testoAnnuncio, Integer prezzo, Date data, Boolean aperto) {
+		super();
+		this.id = id;
+		this.testoAnnuncio = testoAnnuncio;
+		this.prezzo = prezzo;
+		this.data = data;
+		this.aperto = aperto;
 	}
 
 	public Long getId() {
@@ -70,12 +93,12 @@ public class AnnuncioDTO {
 		this.aperto = aperto;
 	}
 
-	public UtenteDTO getUtenteInserimento() {
-		return utenteInserimento;
+	public UtenteDTO getUtente() {
+		return utente;
 	}
 
-	public void setUtenteInserimento(UtenteDTO utenteInserimento) {
-		this.utenteInserimento = utenteInserimento;
+	public void setUtente(UtenteDTO utente) {
+		this.utente = utente;
 	}
 
 	public Long[] getCategorieIds() {
@@ -86,52 +109,36 @@ public class AnnuncioDTO {
 		this.categorieIds = categorieIds;
 	}
 
-	public AnnuncioDTO id(Long id) {
-		this.setId(id);
-		return this;
+	public Annuncio buildAnnuncioModel(boolean includeIdCategorie) {
+		Annuncio result = new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto,
+				this.utente.buildUtenteModel(false));
+
+		if (includeIdCategorie && categorieIds != null)
+			result.setCategorie(
+					Arrays.asList(categorieIds).stream().map(id -> new Categoria(id)).collect(Collectors.toSet()));
+
+		return result;
 	}
 
-	public AnnuncioDTO testoAnnuncio(String testoAnnuncio) {
-		this.setTestoAnnuncio(testoAnnuncio);
-		return this;
+	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio annuncioModel, boolean includeUtente,
+			boolean includeCategorie) {
+		AnnuncioDTO result = new AnnuncioDTO(annuncioModel.getId(), annuncioModel.getTestoAnnuncio(),
+				annuncioModel.getPrezzo(), annuncioModel.getData(), annuncioModel.getAperto());
+
+		if (includeUtente)
+			result.setUtente(UtenteDTO.buildUtenteDTOFromModel(annuncioModel.getUtente(), false));
+
+		if (annuncioModel.getCategorie() != null && includeCategorie && !annuncioModel.getCategorie().isEmpty())
+			result.categorieIds = annuncioModel.getCategorie().stream().map(r -> r.getId()).collect(Collectors.toList())
+					.toArray(new Long[] {});
+
+		return result;
 	}
 
-	public AnnuncioDTO data(Date data) {
-		this.setData(data);
-		return this;
-	}
-
-	public AnnuncioDTO prezzo(Integer prezzo) {
-		this.setPrezzo(prezzo);
-		return this;
-	}
-
-	public AnnuncioDTO aperto(Boolean aperto) {
-		this.setAperto(aperto);
-		return this;
-	}
-
-	public AnnuncioDTO utenteInserimento(UtenteDTO utenteInserimento) {
-		this.setUtenteInserimento(utenteInserimento);
-		return this;
-	}
-
-	public AnnuncioDTO categorieIds(Long[] ids) {
-		this.setCategorieIds(ids);
-		return this;
-	}
-
-	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio model) {
-		return new AnnuncioDTO().id(model.getId()).testoAnnuncio(model.getTestoAnnuncio()).prezzo(model.getPrezzo())
-				.data(model.getData()).aperto(model.getAperto())
-				.utenteInserimento(UtenteDTO.buildUtenteDTOFromModel(model.getUtenteInserimento(), false))
-				.categorieIds(model.getCategorie().stream().map(c -> c.getId()).collect(Collectors.toList())
-						.toArray(new Long[] {}));
-	}
-
-	public static List<AnnuncioDTO> buildAnnuncioDTOListFromModelList(List<Annuncio> listAnnunci) {
-		return listAnnunci.stream().map(annuncioItem -> {
-			return AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioItem);
+	public static List<AnnuncioDTO> createAnnuncioDTOFromModelList(List<Annuncio> modelListInput, boolean includeUtente,
+			boolean includeCategorie) {
+		return modelListInput.stream().map(annuncioEntity -> {
+			return AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioEntity, includeUtente, includeCategorie);
 		}).collect(Collectors.toList());
 	}
 

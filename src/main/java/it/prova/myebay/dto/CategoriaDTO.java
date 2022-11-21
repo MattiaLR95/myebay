@@ -12,7 +12,12 @@ public class CategoriaDTO {
 	private String descrizione;
 	private String codice;
 
+	public CategoriaDTO() {
+		super();
+	}
+
 	public CategoriaDTO(Long id, String descrizione, String codice) {
+		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.codice = codice;
@@ -46,15 +51,21 @@ public class CategoriaDTO {
 		return new CategoriaDTO(categoriaModel.getId(), categoriaModel.getDescrizione(), categoriaModel.getCodice());
 	}
 
-	public static List<CategoriaDTO> createRuoloDTOListFromModelSet(Set<Categoria> modelListInput) {
+	public static List<CategoriaDTO> createCategoriaDTOListFromModelSet(Set<Categoria> modelListInput) {
 		return modelListInput.stream().map(categoriaEntity -> {
 			return CategoriaDTO.buildCategoriaDTOFromModel(categoriaEntity);
 		}).collect(Collectors.toList());
 	}
 
-	public static List<CategoriaDTO> createRuoloDTOListFromModelList(List<Categoria> modelListInput) {
+	public static List<CategoriaDTO> createCategoriaDTOListFromModelList(List<Categoria> modelListInput) {
 		return modelListInput.stream().map(categoriaEntity -> {
 			return CategoriaDTO.buildCategoriaDTOFromModel(categoriaEntity);
 		}).collect(Collectors.toList());
 	}
+
+	@Override
+	public String toString() {
+		return descrizione;
+	}
+
 }

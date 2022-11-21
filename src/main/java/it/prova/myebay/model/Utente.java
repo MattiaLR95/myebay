@@ -43,15 +43,15 @@ public class Utente {
 	@Enumerated(EnumType.STRING)
 	private StatoUtente stato;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utente")
+	private Set<Annuncio> annunci = new HashSet<Annuncio>(0);
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utente")
+	private Set<Acquisto> acquisti = new HashSet<Acquisto>(0);
+
 	@ManyToMany
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteInserimento")
-	private Set<Annuncio> annunci = new HashSet<>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteAcquirente")
-	private Set<Acquisto> acquisti = new HashSet<>();
 
 	public Utente() {
 	}
@@ -71,7 +71,19 @@ public class Utente {
 	}
 
 	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated,
+			StatoUtente stato) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dateCreated = dateCreated;
+		this.stato = stato;
+	}
+
+	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated,
 			Integer creditoResiduo, StatoUtente stato) {
+		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -138,20 +150,20 @@ public class Utente {
 		this.dateCreated = dateCreated;
 	}
 
-	public Integer getCreditoResiduo() {
-		return creditoResiduo;
-	}
-
-	public void setCreditoResiduo(Integer creditoResiduo) {
-		this.creditoResiduo = creditoResiduo;
-	}
-
 	public StatoUtente getStato() {
 		return stato;
 	}
 
 	public void setStato(StatoUtente stato) {
 		this.stato = stato;
+	}
+
+	public Integer getCreditoResiduo() {
+		return creditoResiduo;
+	}
+
+	public void setCreditoResiduo(Integer creditoResiduo) {
+		this.creditoResiduo = creditoResiduo;
 	}
 
 	public Set<Annuncio> getAnnunci() {

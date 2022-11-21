@@ -6,39 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.prova.myebay.model.Ruolo;
-import it.prova.myebay.repository.ruolo.RuoloRepository;
+import it.prova.myebay.model.Categoria;
+import it.prova.myebay.repository.categoria.CategoriaRepository;
 
 @Service
-public class RuoloServiceImpl implements RuoloService {
+public class CategoriaServiceImpl implements CategoriaService {
 
 	@Autowired
-	private RuoloRepository repository;
+	private CategoriaRepository repository;
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Ruolo> listAll() {
-		return (List<Ruolo>) repository.findAll();
+	public List<Categoria> listAll() {
+		return (List<Categoria>) repository.findAll();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Ruolo caricaSingoloElemento(Long id) {
+	public Categoria caricaSingoloElemento(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	@Transactional
-	public void aggiorna(Ruolo ruoloInstance) {
+	public void aggiorna(Categoria categoriaInstance) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	@Transactional
-	public void inserisciNuovo(Ruolo ruoloInstance) {
-		repository.save(ruoloInstance);
+	public void inserisciNuovo(Categoria categoriaInstance) {
+		repository.save(categoriaInstance);
 
 	}
 
@@ -51,13 +51,13 @@ public class RuoloServiceImpl implements RuoloService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice) {
+	public Categoria cercaPerDescrizioneECodice(String descrizione, String codice) {
 		return repository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
 	@Override
-	public List<Ruolo> cercaRuoliByIds(Long[] ids) {
-		return repository.findAllRuoliByIds(ids);
+	public List<Categoria> cercaCategorieByIds(Long[] ids) {
+		return repository.findAllCategorieByIds(ids);
 	}
 
 }

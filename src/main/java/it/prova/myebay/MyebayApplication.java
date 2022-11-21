@@ -7,18 +7,24 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import it.prova.myebay.model.Categoria;
 import it.prova.myebay.model.Ruolo;
 import it.prova.myebay.model.Utente;
+import it.prova.myebay.service.CategoriaService;
 import it.prova.myebay.service.RuoloService;
 import it.prova.myebay.service.UtenteService;
 
 @SpringBootApplication
-public class MyebayApplication implements CommandLineRunner{
+public class MyebayApplication implements CommandLineRunner {
 
 	@Autowired
 	private RuoloService ruoloServiceInstance;
+
 	@Autowired
 	private UtenteService utenteServiceInstance;
+
+	@Autowired
+	private CategoriaService categoriaServiceInstance;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MyebayApplication.class, args);
@@ -33,6 +39,15 @@ public class MyebayApplication implements CommandLineRunner{
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Classic User", "ROLE_CLASSIC_USER") == null) {
 			ruoloServiceInstance.inserisciNuovo(new Ruolo("Classic User", "ROLE_CLASSIC_USER"));
 		}
+
+		if (categoriaServiceInstance.cercaPerDescrizioneECodice("Elettronica", "CATEGORIA_ELETTRONICA") == null)
+			categoriaServiceInstance.inserisciNuovo(new Categoria("Elettronica", "CATEGORIA_ELETTRONICA"));
+
+		if (categoriaServiceInstance.cercaPerDescrizioneECodice("Giardinaggio", "CATEGORIA_GIARDINAGGIO") == null)
+			categoriaServiceInstance.inserisciNuovo(new Categoria("Giardinaggio", "CATEGORIA_GIARDINAGGIO"));
+
+		if (categoriaServiceInstance.cercaPerDescrizioneECodice("Abbigliamento", "CATEGORIA_ABBIGLIAMENTO") == null)
+			categoriaServiceInstance.inserisciNuovo(new Categoria("Abbigliamento", "CATEGORIA_ABBIGLIAMENTO"));
 
 		// a differenza degli altri progetti cerco solo per username perche' se vado
 		// anche per password ogni volta ne inserisce uno nuovo, inoltre l'encode della

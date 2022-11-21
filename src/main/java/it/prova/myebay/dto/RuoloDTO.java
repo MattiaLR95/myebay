@@ -51,11 +51,16 @@ public class RuoloDTO {
 			return RuoloDTO.buildRuoloDTOFromModel(ruoloEntity);
 		}).collect(Collectors.toList());
 	}
-	
+
 	public static List<RuoloDTO> createRuoloDTOListFromModelList(List<Ruolo> modelListInput) {
 		return modelListInput.stream().map(ruoloEntity -> {
 			return RuoloDTO.buildRuoloDTOFromModel(ruoloEntity);
 		}).collect(Collectors.toList());
 	}
-	
+
+	@Override
+	public String toString() {
+		return descrizione;
+	}
+
 }
