@@ -56,11 +56,14 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 
 	@Override
 	@Transactional
-	public void inserisciNuovo(Annuncio annuncioInstance) {
+	public void inserisciNuovo(Annuncio annuncioInstance, String username) {
 		annuncioInstance.setData(new Date());
 		annuncioInstance.setAperto(true);
+		if (username != null) {
+			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+			annuncioInstance.setUtente(utenteInSessione);
+		}
 		repository.save(annuncioInstance);
-
 	}
 
 	@Override

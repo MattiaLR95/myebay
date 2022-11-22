@@ -1,6 +1,5 @@
 package it.prova.myebay.web.controller;
 
-
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,16 +118,14 @@ public class AnnuncioController {
 
 	@PostMapping("/save")
 	public String save(@Valid @ModelAttribute("insert_annuncio_attr") AnnuncioDTO annuncioDTO, BindingResult result,
-			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request, Principal principal) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("categorie_totali_attr",
 					CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
 			return "annuncio/insert";
 		}
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		annuncioDTO.setUtente(utenteInSessione);
-		annuncioService.inserisciNuovo(annuncioDTO.buildAnnuncioModel(true));
+		annuncioService.inserisciNuovo(annuncioDTO.buildAnnuncioModel(true), principal.getName());
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
@@ -202,11 +199,11 @@ public class AnnuncioController {
 				acquistoService.findAllAcquistiEagerUtente(utenteInSessione.getId()), true));
 		return "acquisto/list";
 	}
-	
+
 	@GetMapping("/acquistaWithoutAuth")
-	public String acquistaWithoutAuth(@RequestParam(required = true) Long idAnnuncioWithNoAuth,
-			Model model, RedirectAttributes redirectAttrs,HttpServletRequest request, Principal principal) {
-		System.out.println("maledetto   "+idAnnuncioWithNoAuth);
+	public String acquistaWithoutAuth(@RequestParam(required = true) Long idAnnuncioWithNoAuth, Model model,
+			RedirectAttributes redirectAttrs, HttpServletRequest request, Principal principal) {
+		System.out.println("maledetto   " + idAnnuncioWithNoAuth);
 		if (principal != null) {
 			return this.acquisto(idAnnuncioWithNoAuth, model, redirectAttrs, request);
 		}

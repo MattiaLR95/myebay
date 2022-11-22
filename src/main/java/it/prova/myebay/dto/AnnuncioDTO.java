@@ -110,8 +110,7 @@ public class AnnuncioDTO {
 	}
 
 	public Annuncio buildAnnuncioModel(boolean includeIdCategorie) {
-		Annuncio result = new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto,
-				this.utente.buildUtenteModel(false));
+		Annuncio result = new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto);
 
 		if (includeIdCategorie && categorieIds != null)
 			result.setCategorie(
