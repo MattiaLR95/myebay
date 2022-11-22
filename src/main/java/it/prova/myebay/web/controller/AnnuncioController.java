@@ -1,6 +1,8 @@
 package it.prova.myebay.web.controller;
 
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -199,6 +201,17 @@ public class AnnuncioController {
 		model.addAttribute("acquisti_list_attribute", AcquistoDTO.createAcquistoDTOFromModelList(
 				acquistoService.findAllAcquistiEagerUtente(utenteInSessione.getId()), true));
 		return "acquisto/list";
+	}
+	
+	@GetMapping("/acquistaWithoutAuth")
+	public String acquistaWithoutAuth(@RequestParam(required = true) Long idAnnuncioWithNoAuth,
+			Model model, RedirectAttributes redirectAttrs,HttpServletRequest request, Principal principal) {
+		System.out.println("maledetto   "+idAnnuncioWithNoAuth);
+		if (principal != null) {
+			return this.acquisto(idAnnuncioWithNoAuth, model, redirectAttrs, request);
+		}
+		model.addAttribute("idAnnuncioWithNoAuth", idAnnuncioWithNoAuth);
+		return "/login";
 	}
 
 }

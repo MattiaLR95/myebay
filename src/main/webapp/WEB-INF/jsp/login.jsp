@@ -9,12 +9,12 @@
 	
 	
 		 <!-- Custom styles for login -->
-	    <link href="assets/css/signin.css" rel="stylesheet">
+	    <link href="${pageContext.request.contextPath}/assets/css/signin.css" rel="stylesheet">
 	</head>
 	
 	<body class="text-center">
 		<main class="form-signin">
-			<form class="form-signin" name='login' action="login" method='POST' novalidate="novalidate">
+			<form class="form-signin" name='login' action="${pageContext.request.contextPath}/login" method='POST' novalidate="novalidate">
 		   	
 			   	<div class="alert alert-danger alert-dismissible fade show ${errorMessage==null?'d-none': ''}" role="alert">
 				  ${errorMessage}
@@ -24,8 +24,9 @@
 				  ${infoMessage}
 				</div>
 				
+				<input type="hidden" name="idAnnuncioWithNoAuth" value="${idAnnuncioWithNoAuth }">
 				
-			  	<img class="mb-4" src="./assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+			  	<img class="mb-4" src="${pageContext.request.contextPath}/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
 				<h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 		    	
 		    	

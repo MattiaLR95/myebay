@@ -62,17 +62,15 @@
 					        <a href="${pageContext.request.contextPath }/annuncio/list" class='btn btn-outline-secondary' style='width:80px'>
 					            <i class='fa fa-chevron-left'></i> Back
 					        </a>
-					        <sec:authorize access="isAuthenticated()">
-					        
-					        <a id="acquistoLink_#_${show_annuncio_attr.id }" class="btn btn-success link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${show_annuncio_attr.aperto?'Acquista':''}</a>
-						    
-						    </sec:authorize>
-						    
-						    <sec:authorize access="!isAuthenticated()">
-						    
-						    <a class="btn btn-success" href="${pageContext.request.contextPath }/login">${show_annuncio_attr.aperto?'Acquista':''}</a>
-						    
-						    </sec:authorize>
+					        <c:if test="${show_annuncio_attr.aperto }">
+						        <sec:authorize access="isAuthenticated()">
+						        	<a id="acquistoLink_#_${show_annuncio_attr.id }" class="btn btn-success link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >Acquista</a>
+							    </sec:authorize>
+
+							    <sec:authorize access="!isAuthenticated()">
+							   		<a class="btn btn-success" href="${pageContext.request.contextPath}/annuncio/acquistaWithoutAuth?idAnnuncioWithNoAuth=${show_annuncio_attr.id }">Acquista</a> 
+							    </sec:authorize>
+						    </c:if>
 					        
 					    </div>
 					<!-- end card -->
