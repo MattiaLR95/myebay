@@ -50,13 +50,18 @@ public class LoginController {
     }
 
 	@RequestMapping(value = "/executeLogout", method = RequestMethod.GET)
-	public String logoutPage(Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String logoutPage(String successMessage, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		//dovrebbe essere già impostato a null dalle impostazioni invalidateHttpSession(true)
 		//nel SecSecurityConfig ma il controllo si fa comunque
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
+		
+		if(model.getAttribute("successMessage") != null) {
+			model.addAttribute("successMessage", successMessage);
+		}
+		
 		model.addAttribute("infoMessage", "You have been successfully logged out !!");
 		return "login";
 	}
