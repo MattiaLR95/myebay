@@ -25,6 +25,10 @@ public class LoginController {
 			model.addAttribute("errorMessage", 
                      getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 		}
+		String referrer = request.getHeader("Referer");
+	    if(referrer!=null){
+	        request.getSession().setAttribute("url_prior_login", referrer);
+	    }
 		return "login";
 	}
 	
