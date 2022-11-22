@@ -18,5 +18,5 @@ public interface AcquistoService {
 
 	public List<Acquisto> findByExample(Acquisto example);
 
-	public List<Acquisto> findAllAcquistiEagerUtente(Long id);
+	public List<Acquisto> findAllAcquistiEagerUtente(String username);
 }

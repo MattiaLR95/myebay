@@ -36,20 +36,24 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 	@Override
 	@Transactional(readOnly = true)
 	public Annuncio caricaSingoloElemento(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).orElse(null);
 	}
 
 	@Override
 	@Transactional
-	public void aggiorna(Annuncio annuncioInstance) {
+	public void aggiorna(Annuncio annuncioInstance, String username) {
 		Annuncio annuncioReloaded = repository.findById(annuncioInstance.getId()).orElse(null);
 		if (annuncioReloaded == null)
 			throw new RuntimeException("Elemento non trovato");
+		if (username == null)
+			throw new RuntimeException("Username non trovato!");
 
 		annuncioReloaded.setTestoAnnuncio(annuncioInstance.getTestoAnnuncio());
 		annuncioReloaded.setCategorie(annuncioInstance.getCategorie());
 		annuncioReloaded.setPrezzo(annuncioInstance.getPrezzo());
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		annuncioReloaded.setUtente(utenteInSessione);
+
 		repository.save(annuncioReloaded);
 
 	}
@@ -57,13 +61,17 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 	@Override
 	@Transactional
 	public void inserisciNuovo(Annuncio annuncioInstance, String username) {
+
+		if (username == null)
+			throw new RuntimeException("Username non trovato.");
+
 		annuncioInstance.setData(new Date());
 		annuncioInstance.setAperto(true);
-		if (username != null) {
-			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
-			annuncioInstance.setUtente(utenteInSessione);
-		}
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		annuncioInstance.setUtente(utenteInSessione);
+
 		repository.save(annuncioInstance);
+
 	}
 
 	@Override
@@ -74,36 +82,51 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 	}
 
 	@Override
-	public List<Annuncio> findByExample(Annuncio example) {
+	public List<Annuncio> findByExample(Annuncio example, String username) {
+		if (username != null) {
+			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+			example.setUtente(utenteInSessione);
+		}
 		return repository.findByExample(example);
 	}
 
 	@Override
-	public List<Annuncio> findByExampleEager(Annuncio example) {
+	public List<Annuncio> findByExampleEager(Annuncio example, String username) {
+		if (username != null) {
+			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+			example.setUtente(utenteInSessione);
+		}
 		return repository.findByExampleEager(example);
 	}
 
 	@Override
-	public Annuncio caricaSingoloElementoConCategorie(Long id) {
-		return repository.findByIdConCategorie(id).orElse(null);
+	public Annuncio caricaSingoloElementoConCategorie(Long id, String username) {
+		Annuncio annuncioEager = repository.findByIdConCategorie(id).orElse(null);
+		if (username != null) {
+			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+			annuncioEager.setUtente(utenteInSessione);
+		}
+		return annuncioEager;
 	}
 
 	@Override
 	@Transactional
-	public void acquista(Long id, Utente utenteInstance) {
+	public void acquista(Long id, String username) {
 		Annuncio annuncioDaAcquistare = repository.findById(id).orElse(null);
-		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
+		if (username == null)
+			throw new RuntimeException("Utente non trovato.");
+
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+
+		Utente utenteReloaded = utenteRepository.findById(utenteInSessione.getId()).orElse(null);
 
 		if (annuncioDaAcquistare == null)
 			throw new RuntimeException("Annuncio non trovato.");
 
-		if (utenteReloaded == null)
-			throw new RuntimeException("Utente non trovato.");
-
-		if (utenteInstance.getCreditoResiduo() < annuncioDaAcquistare.getPrezzo())
+		if (utenteInSessione.getCreditoResiduo() < annuncioDaAcquistare.getPrezzo())
 			throw new FondoInsufficienteException("Credito residuo insufficiente per effettuare l'acquisto.");
 
-		int creditoAggiornato = utenteInstance.getCreditoResiduo() - annuncioDaAcquistare.getPrezzo();
+		int creditoAggiornato = utenteInSessione.getCreditoResiduo() - annuncioDaAcquistare.getPrezzo();
 
 		utenteReloaded.setCreditoResiduo(creditoAggiornato);
 		utenteRepository.save(utenteReloaded);
@@ -111,7 +134,7 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 		annuncioDaAcquistare.setAperto(false);
 
 		Acquisto nuovoAcquisto = new Acquisto(annuncioDaAcquistare.getTestoAnnuncio(), new Date(),
-				annuncioDaAcquistare.getPrezzo(), utenteInstance);
+				annuncioDaAcquistare.getPrezzo(), utenteInSessione);
 
 		acquistoRepository.save(nuovoAcquisto);
 
